@@ -1,0 +1,13 @@
+use_frameworks!
+
+platform :ios, '8.0'
+
+target 'IWNetWorkingManager_Example' do
+  pod 'IWNetWorkingManager', :path => '../'
+
+  target 'IWNetWorkingManager_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
