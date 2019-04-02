@@ -1,0 +1,6 @@
+framework module IWNetWorkingManager {
+  umbrella header "IWNetWorkingManager-umbrella.h"
+
+  export *
+  module * { export * }
+}

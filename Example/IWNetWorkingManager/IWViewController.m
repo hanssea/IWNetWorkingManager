@@ -7,6 +7,7 @@
 //
 
 #import "IWViewController.h"
+#import <IWNetWorkingManager.h>
 
 @interface IWViewController ()
 
@@ -17,13 +18,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
+	
+    IWRequest *request=[IWRequest new];
+    request.url=@"www.baidu.com";
+    request.parameter=@{@"name":@"1"};
+    request.tryMethod=IWTryMust;
+    request.send=IWSendPost;
+    request.showHUD=YES;
+    [[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
+        NSLog(@"obj %@",obj);
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"error %@",error);
+    }];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end

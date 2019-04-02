@@ -59,13 +59,13 @@
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
 		71719F9E1E33DC2100824A3D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		76A956A2BBE73A9FEAA40CB2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
+		76A956A2BBE73A9FEAA40CB2 /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		981DE13B12EFC9C6B04812C8 /* Pods-IWNetWorkingManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IWNetWorkingManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-IWNetWorkingManager_Tests/Pods-IWNetWorkingManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A7614A5C0D367FB73D2FF12E /* Pods-IWNetWorkingManager_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IWNetWorkingManager_Example.release.xcconfig"; path = "Target Support Files/Pods-IWNetWorkingManager_Example/Pods-IWNetWorkingManager_Example.release.xcconfig"; sourceTree = "<group>"; };
-		C6A245764139CDAEA4BE323B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; name = README.md; path = ../README.md; sourceTree = "<group>"; };
+		C6A245764139CDAEA4BE323B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		C9891BC0A492046A67D0AA44 /* Pods_IWNetWorkingManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IWNetWorkingManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		D9D04ACA5E9B126D95496209 /* IWNetWorkingManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; name = IWNetWorkingManager.podspec; path = ../IWNetWorkingManager.podspec; sourceTree = "<group>"; };
+		D9D04ACA5E9B126D95496209 /* IWNetWorkingManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = IWNetWorkingManager.podspec; path = ../IWNetWorkingManager.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		F80DA38B4799588F6B27D1BD /* Pods_IWNetWorkingManager_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IWNetWorkingManager_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -193,7 +193,6 @@
 				981DE13B12EFC9C6B04812C8 /* Pods-IWNetWorkingManager_Tests.debug.xcconfig */,
 				5D12E5886734508A8E8D912F /* Pods-IWNetWorkingManager_Tests.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -258,6 +257,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -326,13 +326,19 @@
 			);
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-IWNetWorkingManager_Example/Pods-IWNetWorkingManager_Example-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
+				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
 				"${BUILT_PRODUCTS_DIR}/IWNetWorkingManager/IWNetWorkingManager.framework",
+				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 			);
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IWNetWorkingManager.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
