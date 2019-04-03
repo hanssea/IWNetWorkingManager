@@ -34,7 +34,7 @@ typedef NS_ENUM(NSInteger, IWSend) {
 /**
  请求ID
  */
-@property (nonatomic,strong) NSString * requestID;
+@property (nonatomic,copy) NSString  * requestID;
 /**
  请求参数
  */
@@ -57,11 +57,11 @@ typedef NS_ENUM(NSInteger, IWSend) {
 @property (nonatomic,assign) IWSend send;
 
 /**
- 图片文件
+ 图片文件必须是UIImage对象
  */
-@property (nonatomic,strong) NSData *imageData;
+@property (nonatomic,strong) NSArray *imageArray;
 
-@property (nonatomic,assign) BOOL showHUD;
+
 
 
 @end

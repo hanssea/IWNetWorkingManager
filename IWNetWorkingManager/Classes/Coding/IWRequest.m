@@ -14,7 +14,6 @@
         self.retryCount=3;
         self.tryMethod=IWTryRetry;
         self.send=IWSendPost;
-        self.showHUD=NO;
     }return self;
 }
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key{

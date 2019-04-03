@@ -20,16 +20,15 @@
     [super viewDidLoad];
 	
     IWRequest *request=[IWRequest new];
-    request.url=@"www.baidu.com";
-    request.parameter=@{@"name":@"1"};
+    request.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
     request.tryMethod=IWTryMust;
-    request.send=IWSendPost;
-    request.showHUD=YES;
+    request.send=IWSendGet;
     [[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
         NSLog(@"obj %@",obj);
     } failure:^(NSError * _Nonnull error) {
         NSLog(@"error %@",error);
     }];
+    
 }
 
 

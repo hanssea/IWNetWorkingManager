@@ -69,6 +69,7 @@ static IWNetWorkingManager * _single;
     {
         [self startTimer];
         self.semaphore = dispatch_semaphore_create(_maxCurrentNum);
+        self.manager.requestSerializer.timeoutInterval = 15;
         [self.db jq_createTable:@"requestTab" dicOrModel:[IWRequest new]];
     }
     return self;
@@ -77,30 +78,26 @@ static IWNetWorkingManager * _single;
 {
     return [[self alloc] init];
 }
-- (NSString *)MD5lower:(NSString *)inputmessage
+
+- (NSString *)translocTimeToTimeInterval
 {
-    const char *cStr = [[inputmessage stringByAppendingString:salt] UTF8String];
-    //开辟一个16字节的空间
-    unsigned char result[CC_MD5_DIGEST_LENGTH];
-    /*
-     extern unsigned char * CC_MD5(const void *data, CC_LONG len, unsigned char *md)官方封装好的加密方法
-     把str字符串转换成了32位的16进制数列（这个过程不可逆转） 存储到了md这个空间中
-     */
-    CC_MD5(cStr, (CC_LONG)strlen(cStr), result);
-    return [[NSString stringWithFormat:@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-             result[0], result[1], result[2], result[3],
-             result[4], result[5], result[6], result[7],
-             result[8], result[9], result[10], result[11],
-             result[12], result[13], result[14], result[15]
-             ] lowercaseString];  //大小写注意
-    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss SSS"];
+    NSTimeZone* timeZone = [NSTimeZone localTimeZone];
+    [formatter setTimeZone:timeZone];
+    NSDate *datenow = [NSDate date];
+    NSString *timeSp = [NSString stringWithFormat:@"%ld", (long)[datenow timeIntervalSince1970]*1000];
+    return timeSp;
 }
+
 - (void)dataWithRequest:(IWRequest *)request success:(IWSuccessBlock)success failure:(IWFailureBlock)failure{
     if (request==nil) {
         return;
     }
     if (request.requestID.length==0) {
-        request.requestID=[self MD5lower:request.url];
+        request.requestID=[self translocTimeToTimeInterval];
     }
     
     // 如果是必达业务场景则存储在数据库
@@ -324,11 +321,32 @@ static IWNetWorkingManager * _single;
 - (void)uploadRequest:(IWRequest *)request success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
     [self.manager POST:request.url parameters:request.parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-        NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-        formatter.dateFormat = @"yyyyMMddHHmmss";
-        NSString *fileName = [NSString stringWithFormat:@"%@.png",[formatter stringFromDate:[NSDate date]]];
-        //二进制文件，接口key值，文件路径，图片格式
-        [formData appendPartWithFileData:request.imageData name:@"file" fileName:fileName mimeType:@"image/jpg/png/jpeg"];
+        if (request.imageArray.count==0)return ;
+        for (int i = 0; i < request.imageArray.count; i++) {
+            
+            UIImage *image = request.imageArray[i];
+            NSData *imageData = UIImageJPEGRepresentation(image, 0.5);
+            
+            // 在网络开发中，上传文件时，是文件不允许被覆盖，文件重名
+            // 要解决此问题，
+            // 可以在上传时使用当前的系统事件作为文件名
+            NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+            // 设置时间格式
+            [formatter setDateFormat:@"yyyyMMddHHmmss"];
+            NSString *dateString = [formatter stringFromDate:[NSDate date]];
+            NSString *fileName = [NSString  stringWithFormat:@"%@.jpg", dateString];
+            /*
+             *该方法的参数
+             1. appendPartWithFileData：要上传的照片[二进制流]
+             2. name：对应网站上[upload.php中]处理文件的字段（比如upload）
+             3. fileName：要保存在服务器上的文件名
+             4. mimeType：上传的文件的类型
+             */
+            [formData appendPartWithFileData:imageData name:@"upload" fileName:fileName mimeType:@"image/jpeg"]; //
+        }
+        
+        
+        
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -358,7 +376,6 @@ static IWNetWorkingManager * _single;
         _manager.requestSerializer=[AFJSONRequestSerializer serializer];
         _manager.responseSerializer = [AFJSONResponseSerializer serializer];
         [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
-        _manager.requestSerializer.timeoutInterval = 15;
         [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
         _manager.responseSerializer.acceptableContentTypes =[NSSet setWithObjects:@"text/plain", @"multipart/form-data", @"application/json", @"text/html", @"image/jpeg", @"image/png",@"image/jpg", @"application/octet-stream", @"text/json",@"text/javascript", nil];
     }return _manager;
