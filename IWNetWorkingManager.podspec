@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IWNetWorkingManager'
-  s.version          = '0.0.2'
+  s.version          = '1.0.1'
   s.summary          = 'IWNetWorkingManager.for net'
 
 # This description is used to generate tags and improve search results.

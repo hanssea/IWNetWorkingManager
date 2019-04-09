@@ -19,11 +19,10 @@
 {
     [super viewDidLoad];
 	
-    IWRequest *request=[IWRequest new];
-    request.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
-    request.tryMethod=IWTryMust;
-    request.send=IWSendGet;
-    [[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
+    IWRequest *feeds=[[IWRequest alloc] init];
+    feeds.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
+    feeds.send=IWSendGet;
+    [[IWNetWorkingManager share] dataWithRequest:feeds success:^(NSDictionary * _Nonnull obj) {
         NSLog(@"obj %@",obj);
     } failure:^(NSError * _Nonnull error) {
         NSLog(@"error %@",error);

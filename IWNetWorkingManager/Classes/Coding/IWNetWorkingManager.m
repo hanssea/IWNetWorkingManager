@@ -231,10 +231,14 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-         request.retryCount--;
-        
+        if (request.tryMethod==IWTryRetry) {
+             request.retryCount--;
+        }else if (request.tryMethod==IWTryNormal){
+            request.retryCount=0;
+        }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
+       
         
     }];
 }
@@ -261,7 +265,11 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-         request.retryCount--;
+        if (request.tryMethod==IWTryRetry) {
+            request.retryCount--;
+        }else if (request.tryMethod==IWTryNormal){
+            request.retryCount=0;
+        }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         
@@ -287,7 +295,11 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        request.retryCount--;
+        if (request.tryMethod==IWTryRetry) {
+            request.retryCount--;
+        }else if (request.tryMethod==IWTryNormal){
+            request.retryCount=0;
+        }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         
@@ -312,7 +324,11 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-         request.retryCount--;
+        if (request.tryMethod==IWTryRetry) {
+            request.retryCount--;
+        }else if (request.tryMethod==IWTryNormal){
+            request.retryCount=0;
+        }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         
@@ -363,7 +379,11 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        request.retryCount--;
+        if (request.tryMethod==IWTryRetry) {
+            request.retryCount--;
+        }else if (request.tryMethod==IWTryNormal){
+            request.retryCount=0;
+        }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         

@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
  业务类型
  */
 typedef NS_ENUM(NSInteger, IWTry) {
-    IWTryMust = 0,//必达，存储在数据库 无惧于网络环境
-    IWTryRetry = 1,// 失败会默认重试3次
-    IWTryNormal=2,//一般业务场景失败就停止
+    IWTryNormal=100,//一般业务场景失败就停止
+    IWTryRetry,// 失败会默认重试3次
+    IWTryMust//必达，存储在数据库 无惧于网络环境
 };
 /*
  业务类型

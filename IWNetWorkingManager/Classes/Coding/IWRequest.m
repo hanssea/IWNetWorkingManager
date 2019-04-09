@@ -9,15 +9,25 @@
 #import "IWRequest.h"
 
 @implementation IWRequest
+
 - (instancetype)init{
-    if (self=[super init]) {
-        self.retryCount=3;
-        self.tryMethod=IWTryRetry;
-        self.send=IWSendPost;
+    self=[super init];
+    if (self) {
+        _retryCount=3;
+        _send=IWSendPost;
+        _tryMethod=IWTryNormal;
     }return self;
 }
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key{
     
 }
-
+- (void)setTryMethod:(IWTry)tryMethod{
+    _tryMethod=tryMethod;
+}
+- (void)setRetryCount:(NSInteger)retryCount{
+    _retryCount=retryCount;
+}
+- (void)setSend:(IWSend)send{
+    _send=send;
+}
 @end

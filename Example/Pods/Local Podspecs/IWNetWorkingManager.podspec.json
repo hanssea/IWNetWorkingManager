@@ -1,6 +1,6 @@
 {
   "name": "IWNetWorkingManager",
-  "version": "0.0.2",
+  "version": "1.0.1",
   "summary": "IWNetWorkingManager.for net",
   "description": "TODO: 一款基于AFN网络请求助手支持业务稳定重发.",
   "homepage": "https://github.com/hanssea/IWNetWorkingManager",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/hanssea/IWNetWorkingManager.git",
-    "tag": "0.0.2"
+    "tag": "1.0.1"
   },
   "platforms": {
     "ios": "8.0"
