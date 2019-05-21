@@ -7,8 +7,7 @@
 //
 
 #import "IWViewController.h"
-#import <IWNetWorkingManager.h>
-
+#import "IWNetWorkingManager.h"
 @interface IWViewController ()
 
 @end
@@ -18,16 +17,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	
     IWRequest *feeds=[[IWRequest alloc] init];
     feeds.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
     feeds.send=IWSendGet;
     [[IWNetWorkingManager share] dataWithRequest:feeds success:^(NSDictionary * _Nonnull obj) {
-        NSLog(@"obj %@",obj);
+        
     } failure:^(NSError * _Nonnull error) {
-        NSLog(@"error %@",error);
+        
     }];
-    
 }
 
 

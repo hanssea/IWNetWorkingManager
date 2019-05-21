@@ -13,9 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
  业务类型
  */
 typedef NS_ENUM(NSInteger, IWTry) {
-    IWTryNormal=100,//一般业务场景失败就停止
-    IWTryRetry,// 失败会默认重试3次
-    IWTryMust//必达，存储在数据库 无惧于网络环境
+    IWTryNormal=100,  //一般业务场景失败就停止
+    IWTryRetry,       // 失败会默认重试3次
+    IWTryMust        //必须要送达的业务，存储在数据库
 };
 /*
  业务类型
@@ -55,6 +55,7 @@ typedef NS_ENUM(NSInteger, IWSend) {
  请求方式
  */
 @property (nonatomic,assign) IWSend send;
+
 
 /**
  图片文件必须是UIImage对象

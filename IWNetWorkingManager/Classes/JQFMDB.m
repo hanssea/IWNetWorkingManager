@@ -69,7 +69,7 @@ static JQFMDB *jqdb = nil;
         }
     }
     if (![jqdb.db open]) {
-        NSLog(@"database can not open !");
+       
         return nil;
     };
     return jqdb;

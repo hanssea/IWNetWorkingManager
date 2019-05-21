@@ -30,10 +30,11 @@ pod 'IWNetWorkingManager'
 业务类型
 */
 typedef NS_ENUM(NSInteger, IWTry) {
-IWTryMust = 0,//必达，存储在数据库 无惧于网络环境
-IWTryRetry = 1,// 失败会默认重试3次
-IWTryNormal=2,//一般业务场景失败就停止
+IWTryNormal=100,//一般业务场景失败就停止
+IWTryRetry,// 失败会默认重试3次
+IWTryMust//必达，存储在数据库 无惧于网络环境
 };
+
 /*
 请求类型
 */
@@ -44,6 +45,7 @@ IWSendDelete=2,//delete
 IWSendPut, //put
 IWSendupload //upload
 };
+
 
 
 导入头文件
@@ -66,8 +68,19 @@ NSLog(@"error %@",error);
 ## 作者
 ```
 金阳
-jianye0209@yeah.net
+hanssea09@gmail.com
 ```
-## License
 
-IWNetWorkingManager is available under the MIT license. See the LICENSE file for more info.
+## 期待
+```
+如果在使用过程中遇到BUG或者想笔者加入更多功能，希望你能Issues我，谢谢
+如果在使用过程中发现功能不够用，希望你能Issues我，我非常想为这个框架增加更多好用的功能，谢谢
+如果你想为IWNetWorkingManager输出代码，请Pull Requests我
+```
+## 版本说明
+```
+V1.0.1
+支持常见数据请求以及图片上传；
+支持不同场景的业务重发。
+```
+
