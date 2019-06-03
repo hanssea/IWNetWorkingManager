@@ -17,6 +17,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+   
     IWRequest *feeds=[[IWRequest alloc] init];
     feeds.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
     feeds.send=IWSendGet;

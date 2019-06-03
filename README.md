@@ -5,10 +5,6 @@
 [![License](https://img.shields.io/cocoapods/l/IWNetWorkingManager.svg?style=flat)](https://cocoapods.org/pods/IWNetWorkingManager)
 [![Platform](https://img.shields.io/cocoapods/p/IWNetWorkingManager.svg?style=flat)](https://cocoapods.org/pods/IWNetWorkingManager)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
 ## 背景
 ```
 请求的可靠性保障是个很容易被忽视的问题，笔者发现市场上很多App的网络请求都是只进行一次请求，失败后直接给用户提示网络错误。基于最近的项目和自己一点想法于是乎有了这套基于业务场景的网络工具，具体实现思路根据三种业务场景将【IWRequest】按业务分类：
@@ -30,9 +26,9 @@ pod 'IWNetWorkingManager'
 业务类型
 */
 typedef NS_ENUM(NSInteger, IWTry) {
-IWTryNormal=100,//一般业务场景失败就停止
-IWTryRetry,// 失败会默认重试3次
-IWTryMust//必达，存储在数据库 无惧于网络环境
+IWTryNormal=100,      //一般业务场景失败就停止
+IWTryRetry,           //失败会默认重试3次
+IWTryMust            //必须送达业务，存储在数据库
 };
 
 /*
@@ -41,7 +37,7 @@ IWTryMust//必达，存储在数据库 无惧于网络环境
 typedef NS_ENUM(NSInteger, IWSend) {
 IWSendPost = 0,//post
 IWSendGet = 1,// get
-IWSendDelete=2,//delete
+IWSendDelete支持=2,//delete
 IWSendPut, //put
 IWSendupload //upload
 };
@@ -78,9 +74,13 @@ hanssea09@gmail.com
 如果你想为IWNetWorkingManager输出代码，请Pull Requests我
 ```
 ## 版本说明
+所有版本均只用于数据处理，为了使工具简单易用笔者并不打算加入其它数据处理之外的功能，请谅解。
 ```
+V1.1.0
+加入对并发量的控制
+
 V1.0.1
-支持常见数据请求以及图片上传；
-支持不同场景的业务重发。
+支持三种业务场景的数据处理
 ```
+
 

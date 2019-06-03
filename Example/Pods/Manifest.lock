@@ -17,7 +17,7 @@ PODS:
   - FMDB (2.7.5):
     - FMDB/standard (= 2.7.5)
   - FMDB/standard (2.7.5)
-  - IWNetWorkingManager (1.1.0):
+  - IWNetWorkingManager (1.1.2):
     - AFNetworking
     - FMDB
     - MJExtension
@@ -39,7 +39,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
-  IWNetWorkingManager: 5066fec5a98cd0f386dd6025a6f48e683d5a769f
+  IWNetWorkingManager: acc167045723760d6c0fe41e1044607e0dbf0673
   MJExtension: 54dbbf6ee728f1a88e9aad904353d007831c7847
 
 PODFILE CHECKSUM: c9b4ea935d9a1be441636dca1ac5278029ed56a8
