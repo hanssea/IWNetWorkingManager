@@ -63,12 +63,12 @@ typedef NS_ENUM(NSInteger, professionalWorkType) {
  
  IWRequest *request=[IWRequest new];
  request.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
- request.tryMethod=IWTryMust;
- request.send=IWSendGet;
+ request.method=professionalWorkType_get;
+ request.scence=scence_general;
  [[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
-      NSLog(@"obj %@",obj);
-  } failure:^(NSError * _Nonnull error) {
-      NSLog(@"error %@",error);
+ 
+ } failure:^(NSError * _Nonnull error) {
+ 
  }];
  
  
@@ -97,6 +97,9 @@ hanssea09@gmail.com
 ## 版本说明
 所有版本均只用于数据处理，为了使工具简单易用笔者并不打算加入其它数据处理之外的功能，请谅解。
 ```
+V1.2.2
+【优化】处理issues出现的问题
+
 V1.2.1
 【新增】类方法创建请求
 【优化】业务数据处理

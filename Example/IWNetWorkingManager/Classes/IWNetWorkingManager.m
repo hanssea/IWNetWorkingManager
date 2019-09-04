@@ -38,9 +38,7 @@ static NSString * salt =@"aujwejxrlorporttnvk";
  信号控制
  */
 @property (nonatomic, strong) dispatch_group_t group;
-@property (nonatomic, strong) dispatch_semaphore_t semaphore;
-@property (nonatomic, strong) dispatch_queue_t globQueue;
-@property (nonatomic, strong) dispatch_queue_t workQueue;
+
 @property (nonatomic, strong) dispatch_queue_t addDelQueue;
 
 @end
@@ -55,12 +53,7 @@ static IWNetWorkingManager * _single;
     dispatch_once(&onceToken, ^{
         if (_single == nil) {
             _single = [super allocWithZone:zone];
-            _single.group=dispatch_group_create();
-            // 创建信号量 dispatch_semaphore_create(3);//每次最多开11个
-            _single.semaphore = dispatch_semaphore_create(3);
-            //开辟线程组
-            _single.globQueue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
-            _single.workQueue = dispatch_queue_create("WorkingQueue", DISPATCH_QUEUE_CONCURRENT);
+            _single.group= dispatch_group_create();
         }
     });
     
@@ -70,7 +63,6 @@ static IWNetWorkingManager * _single;
 {
     if (self = [super init])
     {
-        self.manager.requestSerializer.timeoutInterval = 15;
         [self.db jq_createTable:@"requestTab" dicOrModel:[IWRequest new]];
     }
     return self;
@@ -85,7 +77,7 @@ static IWNetWorkingManager * _single;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init] ;
     [formatter setDateStyle:NSDateFormatterMediumStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss SSS"];
+    [formatter setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
     NSTimeZone* timeZone = [NSTimeZone localTimeZone];
     [formatter setTimeZone:timeZone];
     NSDate *datenow = [NSDate date];
@@ -98,7 +90,7 @@ static IWNetWorkingManager * _single;
         return;
     }
     if (request.requestID.length==0) {
-        request.requestID=[self translocTimeToTimeInterval];
+        request.requestID=request.url;
     }
     
     // 如果是必达业务场景则存储在数据库
@@ -121,29 +113,29 @@ static IWNetWorkingManager * _single;
     
 
     // 将请求保存起来
-    dispatch_async(self.addDelQueue, ^{
-        if ([self.requestQueue containsObject:request]) return;
-        if (request.retryCount>0) {
-            [self.requestQueue addObject:request];
-            //做容错处理，如果block为空，设置默认block
-            id tmpBlock = [success copy];
-            if (success == nil)
-            {
-                tmpBlock = [^(id obj){} copy];
-            }
-            [self.successQueue addObject:tmpBlock];
-            
-            
-            tmpBlock = [failure copy];
-            if (failure == nil)
-            {
-                tmpBlock = [^(id obj){} copy];
-            }
-            [self.failureQueue addObject:tmpBlock];
-            
-            [self dealRequest];
+    if ([self.requestQueue containsObject:request]) return;
+    
+    if (request.retryCount>0) {
+        [self.requestQueue addObject:request];
+        //做容错处理，如果block为空，设置默认block
+        id tmpBlock = [success copy];
+        if (success == nil)
+        {
+            tmpBlock = [^(id obj){} copy];
         }
-    });
+        [self.successQueue addObject:tmpBlock];
+        
+        
+        tmpBlock = [failure copy];
+        if (failure == nil)
+        {
+            tmpBlock = [^(id obj){} copy];
+        }
+        [self.failureQueue addObject:tmpBlock];
+        
+        // 处理请求
+        [self dealRequest];
+    }
 }
 
 /**
@@ -151,41 +143,41 @@ static IWNetWorkingManager * _single;
  */
 - (void)dealRequest{
     
-    while(self.requestQueue.count>0) {
-        
-        dispatch_group_enter(self.group);
-        
+    while (self.requestQueue.count>0) {
         IWRequest *request=self.requestQueue.firstObject;
         IWSuccessBlock success=self.successQueue.firstObject;
         IWFailureBlock failure=self.failureQueue.firstObject;
-        if (self.requestQueue.count >0)
-        {
-            [self.requestQueue removeObjectAtIndex:0];
-            if (self.successQueue.count>0) {
-                [self.successQueue removeObjectAtIndex:0];
-            }
-            if (self.failureQueue.count>0) {
-                [self.failureQueue removeObjectAtIndex:0];
-            }
-            
+        [self.requestQueue removeObjectAtIndex:0];
+        if (self.successQueue.count>0) {
+            [self.successQueue removeObjectAtIndex:0];
+        }
+        if (self.failureQueue.count>0) {
+            [self.failureQueue removeObjectAtIndex:0];
         }
         
-        if (request.method==professionalWorkType_post) {
-            [self postRequest:request  success:success failure:failure ];
-        }else if (request.method==professionalWorkType_get){
-            [self getRequest:request  success:success failure:failure];
-        }else if (request.method==professionalWorkType_delete){
-            [self DELETERequest:request   success:success failure:failure];
-        }else if (request.method==professionalWorkType_put){
-            [self putRequest:request  success:success failure:failure];
-        }else if (request.method==professionalWorkType_upload){
-            [self putRequest:request   success:success failure:failure];
-        }
+        dispatch_group_enter(self.group);
         
-        dispatch_semaphore_wait(self.semaphore, DISPATCH_TIME_FOREVER);//信号量-1
-    
+        dispatch_queue_t requestQuence = dispatch_queue_create("requestQuence", DISPATCH_QUEUE_CONCURRENT);
+        //异步执行
+        dispatch_async(requestQuence, ^{
+            if (request.method==professionalWorkType_post) {
+                [self postRequest:request  success:success failure:failure ];
+            }else if (request.method==professionalWorkType_get){
+                [self getRequest:request  success:success failure:failure];
+            }else if (request.method==professionalWorkType_delete){
+                [self DELETERequest:request   success:success failure:failure];
+            }else if (request.method==professionalWorkType_put){
+                [self putRequest:request  success:success failure:failure];
+            }else if (request.method==professionalWorkType_upload){
+                [self putRequest:request   success:success failure:failure];
+            }
+        });
     }
-
+    
+    dispatch_group_notify(self.group, dispatch_get_main_queue(), ^{
+        
+    });
+    
 }
 
 /**
@@ -202,7 +194,7 @@ static IWNetWorkingManager * _single;
 - (void)startTimer
 {
     [self.timer invalidate];
-    self.timer = [NSTimer scheduledTimerWithTimeInterval:15 target:self selector:@selector(updateTimer) userInfo:nil repeats:true];
+    self.timer = [NSTimer scheduledTimerWithTimeInterval:8 target:self selector:@selector(updateTimer) userInfo:nil repeats:true];
     [[NSRunLoop mainRunLoop] addTimer:self.timer forMode:NSDefaultRunLoopMode];
 }
 
@@ -220,16 +212,21 @@ static IWNetWorkingManager * _single;
             [self.failureQueue addObject: [^(id obj){} copy]];
         }
         [self dealRequest];
+    }else{
+        [self.timer invalidate];
     }
 }
 - (void)postRequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
-   
+    
+    
     [self.manager POST:request.url parameters:request.parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+       
         if (success) {
             success(responseObject);
         }
@@ -242,8 +239,9 @@ static IWNetWorkingManager * _single;
         
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+       
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
         
         if (failure) {
             failure(error);
@@ -256,7 +254,6 @@ static IWNetWorkingManager * _single;
         }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
-        
         
         if (self.errorBlock) {
             self.errorBlock(error);
@@ -271,8 +268,11 @@ static IWNetWorkingManager * _single;
     [self.manager GET:request.url parameters:request.parameter progress:^(NSProgress * _Nonnull downloadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+       
+        NSLog(@"request.url ----  %@ 接口返回结果  ---  %@",request.url,responseObject);
+       
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
         
         if (success) {
             success(responseObject);
@@ -284,8 +284,10 @@ static IWNetWorkingManager * _single;
         
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+       
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (failure) {
             failure(error);
         }
@@ -307,10 +309,12 @@ static IWNetWorkingManager * _single;
 - (void)DELETERequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
     
-  
+    
     [self.manager DELETE:request.url parameters:request.parameter success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (success) {
             success(responseObject);
         }
@@ -321,8 +325,10 @@ static IWNetWorkingManager * _single;
       
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (failure) {
             failure(error);
         }
@@ -345,8 +351,10 @@ static IWNetWorkingManager * _single;
 {
     
     [self.manager PUT:request.url parameters:request.parameter success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+        
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (success) {
             success(responseObject);
         }
@@ -357,8 +365,10 @@ static IWNetWorkingManager * _single;
         
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+       
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (failure) {
             failure(error);
         }
@@ -412,8 +422,10 @@ static IWNetWorkingManager * _single;
     } progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+       
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (success) {
             success(responseObject);
         }
@@ -424,8 +436,10 @@ static IWNetWorkingManager * _single;
         
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
+        
+        // 任务完成离开组
         dispatch_group_leave(self.group);
-        dispatch_semaphore_signal(self.semaphore);//信号量+1
+        
         if (failure) {
             failure(error);
         }
