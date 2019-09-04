@@ -23,9 +23,6 @@
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
 		995B8739EF1EC8E39142795F /* Pods_IWNetWorkingManager_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F80DA38B4799588F6B27D1BD /* Pods_IWNetWorkingManager_Tests.framework */; };
-		AB75A0E0231F988600F65C7C /* JQFMDB.m in Sources */ = {isa = PBXBuildFile; fileRef = AB75A0DA231F988600F65C7C /* JQFMDB.m */; };
-		AB75A0E1231F988600F65C7C /* IWRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = AB75A0DB231F988600F65C7C /* IWRequest.m */; };
-		AB75A0E2231F988600F65C7C /* IWNetWorkingManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AB75A0DE231F988600F65C7C /* IWNetWorkingManager.m */; };
 		EA5CEFFF6B6AC7F9C63E2384 /* Pods_IWNetWorkingManager_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9891BC0A492046A67D0AA44 /* Pods_IWNetWorkingManager_Example.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,12 +63,6 @@
 		873B8AEA1B1F5CCA007FD442 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = Main.storyboard; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		981DE13B12EFC9C6B04812C8 /* Pods-IWNetWorkingManager_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IWNetWorkingManager_Tests.debug.xcconfig"; path = "Target Support Files/Pods-IWNetWorkingManager_Tests/Pods-IWNetWorkingManager_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		A7614A5C0D367FB73D2FF12E /* Pods-IWNetWorkingManager_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IWNetWorkingManager_Example.release.xcconfig"; path = "Target Support Files/Pods-IWNetWorkingManager_Example/Pods-IWNetWorkingManager_Example.release.xcconfig"; sourceTree = "<group>"; };
-		AB75A0DA231F988600F65C7C /* JQFMDB.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JQFMDB.m; sourceTree = "<group>"; };
-		AB75A0DB231F988600F65C7C /* IWRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IWRequest.m; sourceTree = "<group>"; };
-		AB75A0DC231F988600F65C7C /* IWNetWorkingManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWNetWorkingManager.h; sourceTree = "<group>"; };
-		AB75A0DD231F988600F65C7C /* JQFMDB.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JQFMDB.h; sourceTree = "<group>"; };
-		AB75A0DE231F988600F65C7C /* IWNetWorkingManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IWNetWorkingManager.m; sourceTree = "<group>"; };
-		AB75A0DF231F988600F65C7C /* IWRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IWRequest.h; sourceTree = "<group>"; };
 		C6A245764139CDAEA4BE323B /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		C9891BC0A492046A67D0AA44 /* Pods_IWNetWorkingManager_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IWNetWorkingManager_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D9D04ACA5E9B126D95496209 /* IWNetWorkingManager.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = IWNetWorkingManager.podspec; path = ../IWNetWorkingManager.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
@@ -141,7 +132,6 @@
 		6003F593195388D20070C39A /* Example for IWNetWorkingManager */ = {
 			isa = PBXGroup;
 			children = (
-				AB75A0D9231F988600F65C7C /* Classes */,
 				6003F59C195388D20070C39A /* IWAppDelegate.h */,
 				6003F59D195388D20070C39A /* IWAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -204,19 +194,6 @@
 				5D12E5886734508A8E8D912F /* Pods-IWNetWorkingManager_Tests.release.xcconfig */,
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		AB75A0D9231F988600F65C7C /* Classes */ = {
-			isa = PBXGroup;
-			children = (
-				AB75A0DA231F988600F65C7C /* JQFMDB.m */,
-				AB75A0DB231F988600F65C7C /* IWRequest.m */,
-				AB75A0DC231F988600F65C7C /* IWNetWorkingManager.h */,
-				AB75A0DD231F988600F65C7C /* JQFMDB.h */,
-				AB75A0DE231F988600F65C7C /* IWNetWorkingManager.m */,
-				AB75A0DF231F988600F65C7C /* IWRequest.h */,
-			);
-			path = Classes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -351,6 +328,7 @@
 				"${PODS_ROOT}/Target Support Files/Pods-IWNetWorkingManager_Example/Pods-IWNetWorkingManager_Example-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/AFNetworking/AFNetworking.framework",
 				"${BUILT_PRODUCTS_DIR}/FMDB/FMDB.framework",
+				"${BUILT_PRODUCTS_DIR}/IWNetWorkingManager/IWNetWorkingManager.framework",
 				"${BUILT_PRODUCTS_DIR}/MJExtension/MJExtension.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -359,6 +337,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AFNetworking.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FMDB.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/IWNetWorkingManager.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/MJExtension.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -397,10 +376,7 @@
 			files = (
 				6003F59E195388D20070C39A /* IWAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* IWViewController.m in Sources */,
-				AB75A0E1231F988600F65C7C /* IWRequest.m in Sources */,
-				AB75A0E2231F988600F65C7C /* IWNetWorkingManager.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
-				AB75A0E0231F988600F65C7C /* JQFMDB.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
