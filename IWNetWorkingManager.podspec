@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'IWNetWorkingManager'
-  s.version          = '1.1.2'
+  s.version          = '1.2.1'
   s.summary          = 'IWNetWorkingManager.for net'
 
 # This description is used to generate tags and improve search results.
@@ -32,16 +32,16 @@ TODO: 一款基于AFN网络请求助手支持业务稳定重发.
 
   s.source_files = 'IWNetWorkingManager/Classes/**/*'
   
-  #s.resource_bundles = {
-  #  'IWNetWorkingManager' => ['IWNetWorkingManager/Assets/*.png']
-  #}
+  s.resource_bundles = {
+    'IWNetWorkingManager' => ['IWNetWorkingManager/Assets/*.png']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
    s.dependency 'AFNetworking'
    s.dependency 'FMDB'
    s.dependency 'MJExtension'
-   
-   
+  
+
    
 end

@@ -10,22 +10,30 @@
 
 NS_ASSUME_NONNULL_BEGIN
 /*
- 业务类型
+ 业务场景
  */
-typedef NS_ENUM(NSInteger, IWTry) {
-    IWTryNormal=100,  //一般业务场景失败就停止
-    IWTryRetry,       // 失败会默认重试3次
-    IWTryMust        //必须要送达的业务，存储在数据库
+typedef NS_ENUM(NSInteger, scence) {
+    /**一般场景 请求一次**/
+    scence_general=100,
+    /**重试场景 默认请求3次挂起**/
+    scence_retry,
+    /**必达场景 默认存储数据库发送成功后删除链接**/
+    scence_willMust
 };
 /*
  业务类型
  */
-typedef NS_ENUM(NSInteger, IWSend) {
-    IWSendPost = 0,//post
-    IWSendGet = 1,// get
-    IWSendDelete=2,//delete
-    IWSendPut, //put
-    IWSendupload //upload
+typedef NS_ENUM(NSInteger, professionalWorkType) {
+    /** post 方式 **/
+    professionalWorkType_post = 0,
+    /** get 方式 **/
+    professionalWorkType_get = 1,
+    /** delete 方式 **/
+    professionalWorkType_delete=2,
+    /** put 方式 **/
+    professionalWorkType_put=3,
+    /** upload 方式 **/
+    professionalWorkType_upload
 };
 
 
@@ -44,9 +52,9 @@ typedef NS_ENUM(NSInteger, IWSend) {
  */
 @property (nonatomic,copy) NSString *url;
 /**
- 业务策略
+ 业务场景
  */
-@property (nonatomic,assign) IWTry tryMethod;
+@property (nonatomic,assign) scence scence;
 /**
  失败重发次数 默认3次
  */
@@ -54,7 +62,7 @@ typedef NS_ENUM(NSInteger, IWSend) {
 /**
  请求方式
  */
-@property (nonatomic,assign) IWSend send;
+@property (nonatomic,assign) professionalWorkType method;
 
 
 /**

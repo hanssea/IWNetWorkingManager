@@ -14,20 +14,21 @@
     self=[super init];
     if (self) {
         _retryCount=3;
-        _send=IWSendPost;
-        _tryMethod=IWTryNormal;
+        _method=professionalWorkType_post;
+        _scence=scence_general;
     }return self;
 }
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key{
     
 }
-- (void)setTryMethod:(IWTry)tryMethod{
-    _tryMethod=tryMethod;
+- (void)setScence:(scence)scence{
+    _scence=scence;
+}
+- (void)setMethod:(professionalWorkType)method{
+    _method=method;
 }
 - (void)setRetryCount:(NSInteger)retryCount{
     _retryCount=retryCount;
 }
-- (void)setSend:(IWSend)send{
-    _send=send;
-}
+
 @end

@@ -17,15 +17,14 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-   
-    IWRequest *feeds=[[IWRequest alloc] init];
-    feeds.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
-    feeds.send=IWSendGet;
-    [[IWNetWorkingManager share] dataWithRequest:feeds success:^(NSDictionary * _Nonnull obj) {
+    
+
+    [IWNetWorkingManager  dataWithurl:@"http://t.weather.sojson.com/api/weather/city/101030100" method:professionalWorkType_get scence:scence_general obj:nil success:^(NSDictionary * _Nonnull obj) {
         
     } failure:^(NSError * _Nonnull error) {
         
     }];
+
 }
 
 

@@ -23,23 +23,31 @@ pod 'IWNetWorkingManager'
 ```
 
 /*
-业务类型
+业务场景
 */
-typedef NS_ENUM(NSInteger, IWTry) {
-IWTryNormal=100,      //一般业务场景失败就停止
-IWTryRetry,           //失败会默认重试3次
-IWTryMust            //必须送达业务，存储在数据库
+typedef NS_ENUM(NSInteger, scence) {
+    /**一般场景 请求一次**/
+    scence_general=100,
+    /**重试场景 默认请求3次挂起**/
+    scence_retry,
+    /**必达场景 默认存储数据库发送成功后删除链接**/
+    scence_willMust
 };
 
 /*
-请求类型
+业务类型
 */
-typedef NS_ENUM(NSInteger, IWSend) {
-IWSendPost = 0,//post
-IWSendGet = 1,// get
-IWSendDelete支持=2,//delete
-IWSendPut, //put
-IWSendupload //upload
+typedef NS_ENUM(NSInteger, professionalWorkType) {
+    /** post 方式 **/
+    professionalWorkType_post = 0,
+   /** get 方式 **/
+    professionalWorkType_get = 1,
+    /** delete 方式 **/
+    professionalWorkType_delete=2,
+    /** put 方式 **/
+    professionalWorkType_put=3,
+    /** upload 方式 **/
+    professionalWorkType_upload
 };
 
 
@@ -47,17 +55,30 @@ IWSendupload //upload
 导入头文件
 #import <IWNetWorkingManager.h>
 
-只需要在需要网络请求的地方创建一个 IWRequest 实例即可
+ 
 
-IWRequest *request=[IWRequest new];
-request.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
-request.tryMethod=IWTryMust;
-request.send=IWSendGet;
-[[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
-NSLog(@"obj %@",obj);
-} failure:^(NSError * _Nonnull error) {
-NSLog(@"error %@",error);
-}];
+【用法实例1】
+
+ 只需要在需要网络请求的地方创建一个 IWRequest 实例即可
+ 
+ IWRequest *request=[IWRequest new];
+ request.url=@"http://t.weather.sojson.com/api/weather/city/101030100";
+ request.tryMethod=IWTryMust;
+ request.send=IWSendGet;
+ [[IWNetWorkingManager share] dataWithRequest:request success:^(NSDictionary * _Nonnull obj) {
+      NSLog(@"obj %@",obj);
+  } failure:^(NSError * _Nonnull error) {
+      NSLog(@"error %@",error);
+ }];
+ 
+ 
+【用法实例2】
+
+ [IWNetWorkingManager  dataWithurl:@"http://t.weather.sojson.com/api/weather/city/101030100" method:professionalWorkType_get scence:scence_general obj:nil success:^(NSDictionary * _Nonnull obj) {
+
+ } failure:^(NSError * _Nonnull error) {
+
+ }];
 
 
 ```
@@ -76,11 +97,15 @@ hanssea09@gmail.com
 ## 版本说明
 所有版本均只用于数据处理，为了使工具简单易用笔者并不打算加入其它数据处理之外的功能，请谅解。
 ```
+V1.2.1
+【新增】类方法创建请求
+【优化】业务数据处理
+
 V1.1.0
-加入对并发量的控制
+【新增】加入对并发量的控制
 
 V1.0.1
-支持三种业务场景的数据处理
+【新增】支持三种业务场景的数据处理
 ```
 
 

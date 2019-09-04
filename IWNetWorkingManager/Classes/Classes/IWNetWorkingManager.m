@@ -23,7 +23,6 @@ static NSString * salt =@"aujwejxrlorporttnvk";
  成功回调的request数据
  */
 @property (nonatomic, strong) NSMutableArray *successQueue;
-
 /**
  存放request的失败回调
  */
@@ -103,7 +102,7 @@ static IWNetWorkingManager * _single;
     }
     
     // 如果是必达业务场景则存储在数据库
-    if (request.tryMethod==IWTryMust) {
+    if (request.scence==scence_willMust) {
         
         NSArray *data=[self.db jq_lookupTable:@"requestTab" dicOrModel:[IWRequest class] whereFormat:nil];
         if (data.count>0) {
@@ -171,15 +170,15 @@ static IWNetWorkingManager * _single;
             
         }
         
-        if (request.send==IWSendPost) {
+        if (request.method==professionalWorkType_post) {
             [self postRequest:request  success:success failure:failure ];
-        }else if (request.send==IWSendGet){
+        }else if (request.method==professionalWorkType_get){
             [self getRequest:request  success:success failure:failure];
-        }else if (request.send==IWSendDelete){
+        }else if (request.method==professionalWorkType_delete){
             [self DELETERequest:request   success:success failure:failure];
-        }else if (request.send==IWSendPut){
+        }else if (request.method==professionalWorkType_put){
             [self putRequest:request  success:success failure:failure];
-        }else if (request.send==IWSendupload){
+        }else if (request.method==professionalWorkType_upload){
             [self putRequest:request   success:success failure:failure];
         }
         
@@ -225,7 +224,7 @@ static IWNetWorkingManager * _single;
 }
 - (void)postRequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
-    
+   
     [self.manager POST:request.url parameters:request.parameter progress:^(NSProgress * _Nonnull uploadProgress) {
         
     } success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
@@ -235,9 +234,11 @@ static IWNetWorkingManager * _single;
             success(responseObject);
         }
         //移除保存的请求数据
-        if (request.tryMethod==IWTryMust) {
+        if (request.scence==scence_willMust) {
             [self deleterequest:request];
         }
+        
+       
         
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -248,15 +249,18 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        if (request.tryMethod==IWTryRetry) {
+        if (request.scence==scence_retry) {
             request.retryCount--;
-        }else if (request.tryMethod==IWTryNormal){
+        }else if (request.scence==scence_general){
             request.retryCount=0;
         }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         
         
+        if (self.errorBlock) {
+            self.errorBlock(error);
+        }
     }];
     
 }
@@ -274,9 +278,10 @@ static IWNetWorkingManager * _single;
             success(responseObject);
         }
         //移除保存的请求数据
-        if (request.tryMethod==IWTryMust) {
+        if (request.scence==scence_willMust) {
             [self deleterequest:request];
         }
+        
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         dispatch_group_leave(self.group);
@@ -285,18 +290,23 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        if (request.tryMethod==IWTryRetry) {
+        if (request.scence==scence_retry) {
             request.retryCount--;
-        }else if (request.tryMethod==IWTryNormal){
+        }else if (request.scence==scence_general){
             request.retryCount=0;
         }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
+        
     
+        if (self.errorBlock) {
+            self.errorBlock(error);
+        }
     }];
 }
 - (void)DELETERequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
+    
   
     [self.manager DELETE:request.url parameters:request.parameter success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_group_leave(self.group);
@@ -305,9 +315,10 @@ static IWNetWorkingManager * _single;
             success(responseObject);
         }
         //移除保存的请求数据
-        if (request.tryMethod==IWTryMust) {
+        if (request.scence==scence_willMust) {
             [self deleterequest:request];
         }
+      
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         dispatch_group_leave(self.group);
@@ -316,18 +327,23 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        if (request.tryMethod==IWTryRetry) {
+        if (request.scence==scence_retry) {
             request.retryCount--;
-        }else if (request.tryMethod==IWTryNormal){
+        }else if (request.scence==scence_general){
             request.retryCount=0;
         }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
-        
+       
+        if (self.errorBlock) {
+            self.errorBlock(error);
+        }
+       
     }];
 }
 - (void)putRequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
+    
     [self.manager PUT:request.url parameters:request.parameter success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
         dispatch_group_leave(self.group);
         dispatch_semaphore_signal(self.semaphore);//信号量+1
@@ -335,9 +351,10 @@ static IWNetWorkingManager * _single;
             success(responseObject);
         }
         //移除保存的请求数据
-        if (request.tryMethod==IWTryMust) {
+        if (request.scence==scence_willMust) {
             [self deleterequest:request];
         }
+        
        
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         dispatch_group_leave(self.group);
@@ -346,18 +363,25 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        if (request.tryMethod==IWTryRetry) {
+        if (request.scence==scence_retry) {
             request.retryCount--;
-        }else if (request.tryMethod==IWTryNormal){
+        }else if (request.scence==scence_general){
             request.retryCount=0;
         }
         //添加次数请求数据
         [self dataWithRequest:request success:success failure:failure];
         
+        
+        if (self.errorBlock) {
+            self.errorBlock(error);
+        }
+        
+       
     }];
 }
 - (void)uploadRequest:(IWRequest *)request  success:(IWSuccessBlock)success failure:(IWFailureBlock)failure
 {
+    
     [self.manager POST:request.url parameters:request.parameter constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         if (request.imageArray.count==0)return ;
         for (int i = 0; i < request.imageArray.count; i++) {
@@ -394,9 +418,10 @@ static IWNetWorkingManager * _single;
             success(responseObject);
         }
         //移除保存的请求数据
-        if (request.tryMethod==IWTryMust) {
+        if (request.scence==scence_willMust) {
             [self deleterequest:request];
         }
+        
         
     } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
         dispatch_group_leave(self.group);
@@ -405,23 +430,36 @@ static IWNetWorkingManager * _single;
             failure(error);
         }
         
-        if (request.tryMethod==IWTryRetry) {
+        if (request.scence==scence_retry) {
             request.retryCount--;
-        }else if (request.tryMethod==IWTryNormal){
+        }else if (request.scence==scence_general){
             request.retryCount=0;
         }
         //添加请求数据
         [self dataWithRequest:request success:success failure:failure];
        
+        
+        if (self.errorBlock) {
+            self.errorBlock(error);
+        }
+        
     }];
     
 }
-
++ (void)dataWithurl:(NSString*)url method:(professionalWorkType)method scence:(scence)scence   obj:(nullable NSDictionary *)obj success:(IWSuccessBlock)success failure:(IWFailureBlock)failure{
+    IWRequest *request=[IWRequest new];
+    request.url=url;
+    request.method=method;
+    request.scence=scence;
+    request.parameter=obj;
+    [[IWNetWorkingManager share]dataWithRequest:request success:success failure:failure];
+}
 - (AFHTTPSessionManager *)manager{
     if (!_manager) {
         _manager=[AFHTTPSessionManager manager];
         _manager.responseSerializer = [AFJSONResponseSerializer serializer];
         _manager.requestSerializer=[AFJSONRequestSerializer serializer];
+        _manager.requestSerializer.timeoutInterval=15;
         _manager.responseSerializer = [AFJSONResponseSerializer serializer];
         [_manager.requestSerializer willChangeValueForKey:@"timeoutInterval"];
         [_manager.requestSerializer didChangeValueForKey:@"timeoutInterval"];
